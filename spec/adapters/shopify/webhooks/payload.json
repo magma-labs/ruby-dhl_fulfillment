@@ -1,0 +1,77 @@
+{
+  "order_number": 1234,
+  "shipping_lines": [
+    {
+      "id": 1234567,
+      "title": "Generic Shipping",
+      "price": "10.00",
+      "code": null,
+      "source": "shopify",
+      "phone": null,
+      "requested_fulfillment_service_id": null,
+      "delivery_category": null,
+      "carrier_identifier": null,
+      "tax_lines": [
+      ]
+    },
+    {
+      "id": 89012345,
+      "title": "Generic Shipping",
+      "price": "1.50",
+      "code": null,
+      "source": "shopify",
+      "phone": null,
+      "requested_fulfillment_service_id": null,
+      "delivery_category": null,
+      "carrier_identifier": null,
+      "tax_lines": [
+      ]
+    }
+  ],
+  "tax_lines":[
+      {
+         "title":"CA State Tax",
+         "price":"1.45",
+         "rate":0.0725
+      },
+      {
+         "title":"Los Angeles County Tax is veeeeeeeeeery loooooooooooong",
+         "price":"0.40",
+         "rate":0.02
+      }
+   ],
+  "shipping_address": {
+    "first_name": "Steve",
+    "address1": "123 Shipping Street",
+    "phone": "555-555-SHIP",
+    "city": "Shippington",
+    "zip": "K2P0S0",
+    "province": "Kentucky",
+    "country": "United States",
+    "last_name": "Shipper",
+    "address2": null,
+    "company": "Shipping Company",
+    "latitude": null,
+    "longitude": null,
+    "name": "Steve Shipper",
+    "country_code": "US",
+    "province_code": "KY"
+  },
+  "billing_address": {
+    "first_name": "Bob",
+    "address1": "123 Billing Street",
+    "phone": "555-555-BILL",
+    "city": "Billtown",
+    "zip": "K2P0B0",
+    "province": "Kentucky",
+    "country": "United States",
+    "last_name": "Biller",
+    "address2": null,
+    "company": "My Company",
+    "latitude": null,
+    "longitude": null,
+    "name": "Bob Biller",
+    "country_code": "US",
+    "province_code": "KY"
+  }
+}

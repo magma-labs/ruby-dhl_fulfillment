@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'Gemfile'
+    - 'spec/spec_helper.rb'
   TargetRubyVersion: 2.4.1
 
 Metrics/LineLength:

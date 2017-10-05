@@ -15,19 +15,16 @@ module DHL
     ALREADY_IN_SYSTEM = 'YFC0001'
     INVALID_VALUES_FOR_FIELDS = '919'
 
-    @client_id = ENV['DHL_EFULFILLMENT_CLIENT_ID']
-    @client_secret = ENV['DHL_EFULFILLMENT_CLIENT_SECRET']
-    @account_number = ENV['DHL_EFULFILLMENT_ACCOUNT_NUMBER']
-    @token_api_url = ENV['DHL_EFULFILLMENT_TOKEN_API_URL']
-    @order_api_url = ENV['DHL_EFULFILLMENT_ORDER_API_URL']
-    @order_acknowledgement_api_url = ENV['DHL_EFULFILLMENT_ORDER_AK_API_URL']
-    @order_status_api_url = ENV['DHL_EFULFILLMENT_ORDER_STATUS_API_URL']
-    @order_shipment_details_api_url = ENV['DHL_EFULFILLMENT_ORDER_SHIPPING_API_URL']
-
     class << self
       # :reek:Attribute
-      attr_accessor :client_id, :client_secret, :token_api_url, :order_api_url,
-                    :order_acknowledgement_api_url, :account_number
+      attr_accessor :client_id,
+                    :client_secret,
+                    :account_number,
+                    :token_api_url,
+                    :order_api_url,
+                    :order_status_api_url,
+                    :order_shipment_details_api_url,
+                    :order_acknowledgement_api_url
       def configure
         yield self
       end

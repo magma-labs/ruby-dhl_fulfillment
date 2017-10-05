@@ -5,6 +5,7 @@ module DHL
     module Builders
       # builds the sales order payload
       # rubocop:disable Metrics/ClassLength
+      # :reek:NilCheck
       class SalesOrder
         MAX_ADDRESS_LENGTH = 35
 
@@ -21,7 +22,8 @@ module DHL
         end
 
         def empty_order?
-          @payload && @payload.dig(:CreateSalesOrder, :Order, :OrderDetails, :OrderLine).count <= 0
+          items = @payload&.dig(:CreateSalesOrder, :Order, :OrderDetails, :OrderLine) || []
+          items.empty?
         end
 
         private

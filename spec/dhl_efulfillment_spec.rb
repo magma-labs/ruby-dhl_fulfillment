@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../dhl_efulfillment'
+require 'spec_helper'
 
 RSpec.describe DHL::EFulfillment, '#access_token' do
   before(:each) do

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 module DHL
   module EFulfillment
     module Adapters
@@ -12,7 +14,8 @@ module DHL
           # Adapter for the shopify order
           class Order < ::DHL::EFulfillment::Adapters::Base
             DEFAULT_FIRST_NAME = 'Customer'
-            STATE_CODES = JSON.parse(File.read('lib/dhl_efulfillment/us_state_codes.json')).freeze
+            STATE_CODES_FILE = "#{File.dirname __FILE__}/../../../../us_state_codes.json"
+            STATE_CODES = JSON.parse(File.read(STATE_CODES_FILE)).freeze
 
             def order_id
               payload['id']

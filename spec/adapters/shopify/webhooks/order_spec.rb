@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'dhl_efulfillment/dhl_efulfillment'
 
 nmsp = DHL::EFulfillment::Adapters::Shopify::Webhooks
 

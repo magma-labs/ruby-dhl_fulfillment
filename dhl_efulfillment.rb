@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/object/blank'
+
 require_relative 'lib/adapters/base'
 require_relative 'lib/adapters/shopify/webhooks/order'
 require_relative 'lib/builders/sales_order'

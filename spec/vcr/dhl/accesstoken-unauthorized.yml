@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/auth/accesstoken
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Basic YjIwNjhjZWQtMDE1ZS00MzZmLWJhODYtNmI4NzVlNjUyYjc4YWE6MmZiMjI1MjItNWQ4Mi00YTViLWI5OGItMzgyZWQ1YTU5YzA2YWE=
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Tue, 08 Aug 2017 22:13:03 GMT
+      Server:
+      - Gateway
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-6f378a594a5be4091de18b12 0
+      Www-Authenticate:
+      - Basic realm="DefaultRealm"
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error" : "invalid_client",
+          "error_description" : "Client authentication failed (e.g. unknown client, no client authentication included, or unsupported authentication method).  The authorization server MAY return an HTTP 401 (Unauthorized) status code to indicate which HTTP authentication schemes are supported. "
+        }
+    http_version: 
+  recorded_at: Tue, 08 Aug 2017 22:13:04 GMT
+recorded_with: VCR 3.0.3

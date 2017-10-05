@@ -1,0 +1,151 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order/acknowledgement/1111111/1234/0420FL011
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Bearer hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 08 Aug 2017 22:10:38 GMT
+      Allow:
+      - GET, HEAD, OPTIONS
+      Max-Forwards:
+      - '20'
+      Via:
+      - 1.0 czchoap1040.prg-dc.dhl.com (Gateway)
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-de368a59305b58d13c032c9c 0
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "CreationAcknowledge" : {
+            "Order" : {
+              "AccountNumber" : "1111111",
+              "OrgID" : "1111111",
+              "OrderDateTime" : "2017-02-15T21:27:50-05:00",
+              "OrderNumber" : "0420FL01",
+              "OrderReferenceNumber" : "",
+              "OrderSubmission" : {
+                "OrderSubmissionID" : "0420FL01",
+                "MessageID" : "Id-54dff85888563a809f41f146",
+                "OrderCreationStatus" : "Order Created",
+                "Error" : [ {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "YCP0428",
+                  "ErrorDescription" : "API Security Violation"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                }, {
+                  "ErrorCode" : "119",
+                  "ErrorDescription" : "Instruction type 'Gift' is invalid please use one of the following '[VASCode, VASDesc, DelNotes]'"
+                } ]
+              }
+            }
+          }
+        }
+    http_version:
+  recorded_at: Tue, 08 Aug 2017 22:10:40 GMT
+recorded_with: VCR 3.0.3

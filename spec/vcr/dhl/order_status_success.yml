@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order/status/1111111?orderNumber=1111111
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Bearer hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 29 Aug 2017 17:03:46 GMT
+      Allow:
+      - GET, HEAD, OPTIONS
+      Max-Forwards:
+      - '20'
+      Via:
+      - 1.0 czchoap1040.prg-dc.dhl.com ()
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-729ea559b81d7f2e34832550 0
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "Page" : {
+            "PageNumber" : "1",
+            "IsValidPage" : "Y",
+            "IsLastPage" : "Y",
+            "TotalNumberOfOrders" : "1",
+            "OrderList" : {
+              "Order" : [ {
+                "AccountNumber" : "1111111",
+                "OrgID" : "",
+                "MessageDateTime" : "",
+                "OrderNumber" : "1111111",
+                "OrderReferenceNumber" : "44444",
+                "OrderDateTime" : "2017-02-17T09:58:49-05:00",
+                "OrderStatus" : "Shipped",
+                "IsOnHold" : "N",
+                "HoldReasonCode" : ""
+              } ]
+            }
+          }
+        }
+    http_version:
+  recorded_at: Tue, 29 Aug 2017 17:03:48 GMT
+recorded_with: VCR 3.0.3

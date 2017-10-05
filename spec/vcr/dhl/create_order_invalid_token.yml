@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order
+    body:
+      encoding: UTF-8
+      string: '{"CreateSalesOrder":{"MessageDateTime":"2017-02-16T03:27:50","OrderSubmissionID":"0420FL01","AccountNumber":"1111111","OrgID":"","Order":{"OrderHeader":{"OrderDateTime":"2017-02-16T03:27:50","OrderNumber":"0420FL01","OrderReferenceNumber":"","SalesChannel":"DeC","IsB2BOrder":"N","ShippingServiceID":"DECD
+        5","ShippingServiceOption":"","Charges":{"OrderCurrency":"USD","OrderTotal":"1427.05","OrderSubTotal":"1400","CODAmount":"0","TotalOrderDiscount":"5","TotalShippingCharge":"9.95","TaxTotal":"17.1","TaxDetail":[{"TaxAmount":"0","TaxName":"PST","TaxPercentage":"0"},{"TaxAmount":"17.1","TaxName":"HST/GST","TaxPercentage":"7.5"}],"ChargeDetail":[{"ChargeAmount":"123.45","ChargeName":"Thanks","ChargeType":"Discount"}]},"PaymentMethods":{"PaymentMethod":[{"PaymentType":"Credit
+        Card","AccountHolderName":"AA","TruncatedAccountIdentifier":"0010"},{"PaymentType":"Credit
+        Card","AccountHolderName":"BB","TruncatedAccountIdentifier":"0020"}]},"BillTo":{"FirstName":"Jonathan","LastName":"Doe","AddressLine1":"5923
+        Peachtree Industrial Blvd","AddressLine2":"","AddressLine3":"","City":"Norcross","State":"GA","ZipCode":"30092","Country":"US","PhoneNumber":"1234567890","EmailID":"billto@gmail.com"},"Shipto":{"FirstName":"DHL","LastName":"Doe","AddressLine1":"5923
+        Peachtree Industrial Blvd","City":"Norcross","State":"GA","ZipCode":"30092","Country":"US","PhoneNumber":"1234567890","EmailID":"shipto@gmail.com"}},"OrderDetails":{"OrderLine":[{"OrderLineNumber":"1","OrderedQuantity":"5","ItemID":"8FLEX","ProductIDReference":"","ItemDescription":"8
+        Flex Monthly Subscription","Price":"100","LineTotal":"100","Instruction":[{"Type":"Gift","Details":"Hi!1"}],"TaxDetail":[{"TaxAmount":"15","TaxName":"VAT","TaxPercentage":"10"}]}]}}}}'
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Bearer INVALIDTOKEN
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1732'
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Tue, 08 Aug 2017 22:10:37 GMT
+      Allow:
+      - OPTIONS, POST
+      Server:
+      - Gateway
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-dd368a592f5bf06334ea2471 0
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: "{\r\n  \r\r\n   \"reasons\": [{\"msg\" : \"Invalid Authorization Header\"}],\r\n
+        \ \r\r\n   \"details\": {\r\n    \"msgId\": \"Id-dd368a592f5bf06334ea2471\"\r\n
+        \ }\r\n\r\r\n}"
+    http_version: 
+  recorded_at: Tue, 08 Aug 2017 22:10:37 GMT
+recorded_with: VCR 3.0.3

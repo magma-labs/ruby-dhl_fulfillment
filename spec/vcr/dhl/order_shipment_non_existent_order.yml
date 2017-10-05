@@ -1,0 +1,51 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/shipment/details/1111111?orderNumber=1111111
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Bearer hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Wed, 30 Aug 2017 01:47:46 GMT
+      Allow:
+      - GET, HEAD, OPTIONS
+      Max-Forwards:
+      - '20'
+      Via:
+      - 1.0 czchoap1040.prg-dc.dhl.com ()
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-4219a659ac421381bcc2497c 0
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "session" : "Id-4219a659ac421381bcc2497c",
+          "error" : {
+            "code" : "919",
+            "description" : "Invalid value(s) found for field(s) : OrderNo ('1111111')"
+          }
+        }
+    http_version:
+  recorded_at: Wed, 30 Aug 2017 01:47:48 GMT
+recorded_with: VCR 3.0.3

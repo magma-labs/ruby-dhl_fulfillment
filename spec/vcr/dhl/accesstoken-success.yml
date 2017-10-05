@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/auth/accesstoken
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Basic YjIwNjhjZWQtMDE1ZS00MzZmLWJhODYtNmI4NzVlNjUyYjc4OjJmYjIyNTIyLTVkODItNGE1Yi1iOThiLTM4MmVkNWE1OWMwNg==
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 08 Aug 2017 22:10:31 GMT
+      Server:
+      - Gateway
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-d7368a592a5b2db624a1947b 0
+      Accept:
+      - "*/*"
+      Clientside:
+      - 189.195.131.66
+      Host:
+      - api-qa.dhlecommerce.com
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json
+      Pragma:
+      - no-cache
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R","token_type":"Bearer","expires_in":18000,"scope":"efulfillment"}'
+    http_version: 
+  recorded_at: Tue, 08 Aug 2017 22:10:32 GMT
+recorded_with: VCR 3.0.3

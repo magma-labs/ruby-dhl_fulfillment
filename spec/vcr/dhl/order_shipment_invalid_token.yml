@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/shipment/details/1111111?orderNumber=1111111
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (darwin15.6.0 x86_64) ruby/2.4.1p111
+      Authorization:
+      - Bearer INVALIDTOKEN
+      Host:
+      - api-qa.dhlecommerce.com
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Wed, 30 Aug 2017 01:47:49 GMT
+      Allow:
+      - GET, HEAD, OPTIONS
+      Server:
+      - ''
+      Connection:
+      - close
+      X-Correlationid:
+      - Id-4519a659ad425188931b9ebd 0
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: "{\r\n  \r\r\n   \"reasons\": [{\"msg\" : \"Invalid Authorization Header\"}],\r\n
+        \ \r\r\n   \"details\": {\r\n    \"msgId\": \"Id-4519a659ad425188931b9ebd\"\r\n
+        \ }\r\n\r\r\n}"
+    http_version:
+  recorded_at: Wed, 30 Aug 2017 01:47:49 GMT
+recorded_with: VCR 3.0.3

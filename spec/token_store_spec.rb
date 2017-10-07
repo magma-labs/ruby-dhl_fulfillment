@@ -19,5 +19,13 @@ RSpec.describe DHL::Fulfillment::TokenStore do
 
       VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
     end
+
+    context 'when wrong credentials are provided' do
+      it 'raises an api exception' do
+        VCR.use_cassette 'dhl/accesstoken-unauthorized', allow_playback_repeats: true do
+          expect { subject.api_token }.to raise_error DHL::Fulfillment::APIException
+        end
+      end
+    end
   end
 end

@@ -9,6 +9,8 @@
 #   end
 #
 module Retry
+  protected
+
   def attempt(max_attempts)
     @retry_max = max_attempts
     self
@@ -24,8 +26,6 @@ module Retry
     end
     raise OutOfAttempts
   end
-
-  protected
 
   def next_try!
     raise NextTry

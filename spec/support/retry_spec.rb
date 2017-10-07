@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Retry do
   let(:test_object) { spy }
 
   before do
-    self.extend Retry
+    extend Retry
   end
 
   context 'when the running block calls next_try!' do
@@ -23,7 +25,7 @@ RSpec.describe Retry do
 
     context 'when it runs out of retry attempts' do
       it 'raises an exception' do
-        block = Proc.new do
+        block = proc do
           attempt(5).times do
             test_object.do_something
             next_try!

@@ -15,7 +15,7 @@ module DHL
 
       def api_token
         @api_token ||= attempt(3).times { try_retrieve_token }
-      rescue OutOfRetryAttempts
+      rescue Retry::OutOfAttempts
         raise APIException, "Can't retrieve access token. Verify your credentials."
       end
 

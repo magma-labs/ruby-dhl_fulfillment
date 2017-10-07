@@ -10,24 +10,16 @@ require_relative 'exceptions/already_in_system'
 require_relative 'exception_utils'
 
 module DHL
+  # :reek:Attribute
   # :reek:FeatureEnvy
-  # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/Fulfillment)
+  # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/fulfillment)
   module Fulfillment
     ALREADY_IN_SYSTEM = 'YFC0001'
     INVALID_VALUES_FOR_FIELDS = '919'
 
     class << self
-      # :reek:Attribute
-      attr_accessor :client_id,
-                    :client_secret,
-                    :account_number,
-                    :token_api_url,
-                    :order_api_url,
-                    :order_status_api_url,
-                    :order_shipment_details_api_url,
-                    :order_acknowledgement_api_url
-
       attr_reader :urls
+      attr_accessor :client_id, :client_secret, :account_number
 
       def configure
         yield self

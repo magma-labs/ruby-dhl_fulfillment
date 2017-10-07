@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api-qa.dhlecommerce.com/Fulfillment/v1/order/acknowledgement/1111111/1234/0420FL011
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order/acknowledgement/1111111/1234/0420FL011
     body:
       encoding: US-ASCII
       string: ''

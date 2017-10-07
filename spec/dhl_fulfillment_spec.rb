@@ -3,27 +3,29 @@
 require 'spec_helper'
 
 RSpec.describe DHL::Fulfillment do
-  let(:urls) { subject::Urls::Sandbox.new }
   let(:account_number) { '1111111' }
-  let(:token) do
-    VCR.use_cassette('dhl/accesstoken-success') { return subject.access_token }
-  end
+  let(:urls) { subject::Urls::Sandbox.new }
 
   before(:each) do
-    subject.configure { |config| config.urls = urls }
+    DHL::Fulfillment.configure do |config|
+      config.urls = urls
+      config.api_token = 'test-token'
+    end
   end
 
   describe '#access_token' do
     describe 'initialized with credentials' do
       it 'raises no errors' do
-        expect(token).not_to be_nil
+        VCR.use_cassette('dhl/accesstoken-success') do
+          expect(subject.access_token).not_to be_nil
+        end
       end
     end
 
     context 'when request returns a 403 error' do
       before do
         allow(urls).to receive(:token_get) do
-          'https://api-qa.dhlecommerce.com/Fulfillment/v1/auth/no-exists'
+          'https://api-qa.dhlecommerce.com/Efulfillment/v1/auth/no-exists'
         end
       end
 
@@ -44,20 +46,21 @@ RSpec.describe DHL::Fulfillment do
   end
 
   describe '#create_sales_order' do
-    let(:options) { JSON.parse File.read('spec/support/order_request_body.json') }
+    let(:properties) { JSON.parse File.read('spec/support/order_request_body.json') }
 
     context 'when request is correct' do
-      it 'returns a 200 status code' do
+      it 'returns true' do
         VCR.use_cassette('dhl/create_order_success') do
-          expect { subject.create_sales_order(options, token) }.not_to raise_error
+          expect(subject.create_sales_order(properties)).to be_true
         end
       end
     end
 
-    context 'when options hash is not in the right format' do
+    context 'when properties hash is not in the right format' do
       it 'returns a 400 status code' do
         VCR.use_cassette('dhl/create_order_no_body') do
-          expect { subject.create_sales_order({}, token) }.to raise_error(/400/)
+          properties = {}
+          expect { subject.create_sales_order(properties) }.to raise_error(/400/)
         end
       end
     end
@@ -65,7 +68,7 @@ RSpec.describe DHL::Fulfillment do
     context 'when authorization token is not valid' do
       it 'returns a 401 status code' do
         VCR.use_cassette('dhl/create_order_invalid_token') do
-          expect { subject.create_sales_order(options, 'INVALIDTOKEN') }.to raise_error(/401/)
+          expect { subject.create_sales_order(properties) }.to raise_error(/401/)
         end
       end
     end
@@ -73,8 +76,8 @@ RSpec.describe DHL::Fulfillment do
     context 'when DHL API responds with an "Invalid values for field(s)" error' do
       it 'throws an InvalidValuesFoundForFields error' do
         VCR.use_cassette('dhl/create_order_invalid_fields') do
-          expect { subject.create_sales_order(options, token) }
-              .to raise_error subject::InvalidValuesFoundForFields
+          expect { subject.create_sales_order(properties) }
+              .to raise_error DHL::Fulfillment::InvalidValuesFoundForFields
         end
       end
     end

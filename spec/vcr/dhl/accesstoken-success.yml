@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api-qa.dhlecommerce.com/Fulfillment/v1/auth/accesstoken
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/auth/accesstoken
     body:
       encoding: US-ASCII
       string: ''
@@ -46,7 +46,7 @@ http_interactions:
       - no-cache
     body:
       encoding: UTF-8
-      string: '{"access_token":"hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R","token_type":"Bearer","expires_in":18000,"scope":"Fulfillment"}'
+      string: '{"access_token":"hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R","token_type":"Bearer","expires_in":18000,"scope":"efulfillment"}'
     http_version: 
   recorded_at: Tue, 08 Aug 2017 22:10:32 GMT
 recorded_with: VCR 3.0.3

@@ -3,7 +3,7 @@
 module DHL
   module Fulfillment
     # Error to raise if order is already in DHL's system
-    class AlreadyInSystem < DHLAPIException
+    class AlreadyInSystem < APIException
       def initialize(order_number, api_response = '')
         super("Order #{order_number} already in DHL systems.", api_response)
       end

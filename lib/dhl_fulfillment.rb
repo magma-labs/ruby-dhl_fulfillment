@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 require 'base64'
-require 'uri'
-require 'net/http'
-require 'json'
 require 'rest-client'
-require_relative 'exceptions/acknowledgement_error'
-require_relative 'exceptions/already_in_system'
-require_relative 'exception_utils'
 
 module DHL
   # :reek:Attribute
@@ -37,24 +31,34 @@ module DHL
       def create_sales_order(options)
         call_api method: :post, url: @urls.order_create, body: options.to_json do |response|
           raise InvalidValuesFoundForFields if invalid_fields_error?(response)
+          raise APIException, "Can't create sales order", response.body unless response.code == 202
           true
         end
       end
 
       def sales_order_acknowledgement(order_number, submission_ud)
         url = order_acknowledgement_url(order_number, submission_ud)
-        call_api method: :get, url: url do |response|
-          raise AlreadyInSystem, order_number, response.body if already_in_system?(response)
-          raise AcknowledgementError, response.body if acknowledgement_errors?(response)
+        call_api method: :get, url: url do |res|
+          body = res.body
+          raise AlreadyInSystem, order_number, body if already_in_system?(res)
+          raise AcknowledgementError, body if acknowledgement_errors?(res)
+          raise APIException, "Can't acknowledge sales order", body unless res.code == 200
+          true
         end
       end
 
       def sales_order_status(order_number)
-        call_api method: :get, url: order_status_url(order_number)
+        call_api method: :get, url: order_status_url(order_number) do |res|
+          raise APIException, "Can't check sales order status", res.body unless res.code == 200
+          true
+        end
       end
 
       def shipment_details(order_number)
-        call_api method: :get, url: shipment_details_url(order_number)
+        call_api method: :get, url: shipment_details_url(order_number) do |res|
+          raise APIException, "Can't access shipment details", res.body unless res.code == 200
+          true
+        end
       end
 
       protected

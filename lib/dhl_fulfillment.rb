@@ -14,12 +14,13 @@ module DHL
   # :reek:FeatureEnvy
   # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/fulfillment)
   module Fulfillment
+    API_TIMEOUT = 10
     ALREADY_IN_SYSTEM = 'YFC0001'
     INVALID_VALUES_FOR_FIELDS = '919'
 
     class << self
       attr_reader :urls
-      attr_accessor :client_id, :client_secret, :account_number
+      attr_accessor :client_id, :client_secret, :account_number, :api_token
 
       def configure
         yield self
@@ -33,55 +34,52 @@ module DHL
                 end
       end
 
-      def access_token
-        digest = Base64.encode64("#{@client_id}:#{@client_secret}").delete("\n")
-        res = RestClient.get @urls.token_get, Authorization: "Basic #{digest}"
-        JSON.parse(res.body)['access_token']
-      end
-
-      def create_sales_order(options, token)
-        ExceptionUtils.handle_error_rethrow do
-          headers = request_headers token
-          response = RestClient.post @urls.order_create, options.to_json, headers
+      def create_sales_order(options)
+        call_api method: :post, url: @urls.order_create, body: options.to_json do |response|
           raise InvalidValuesFoundForFields if invalid_fields_error?(response)
-          response
+          true
         end
       end
 
-      def sales_order_acknowledgement(params)
-        ExceptionUtils.handle_error_rethrow do
-          url = order_acknowledgement_url(params)
-          headers = request_headers params[:token]
-          response = RestClient.get url, headers
-          order_number = params[:order_number]
+      def sales_order_acknowledgement(order_number, submission_ud)
+        url = order_acknowledgement_url(order_number, submission_ud)
+        call_api method: :get, url: url do |response|
           raise AlreadyInSystem, order_number, response.body if already_in_system?(response)
           raise AcknowledgementError, response.body if acknowledgement_errors?(response)
-          response
         end
       end
 
-      def sales_order_status(order_number, token)
-        ExceptionUtils.handle_error_rethrow do
-          url = order_status_url(order_number)
-          headers = request_headers token
-          RestClient.get url, headers
-        end
+      def sales_order_status(order_number)
+        call_api method: :get, url: order_status_url(order_number)
       end
 
-      def shipment_details(order_number, token)
-        ExceptionUtils.handle_error_rethrow do
-          url = shipment_details_url(order_number)
-          headers = request_headers token
-          RestClient.get url, headers
-        end
+      def shipment_details(order_number)
+        call_api method: :get, url: shipment_details_url(order_number)
       end
 
       protected
 
-      def order_acknowledgement_url(params)
-        order_number = params[:order_number]
-        order_submission_id = params[:order_submission_id]
-        "#{@urls.order_acknowledgement}/#{@account_number}/#{order_number}/#{order_submission_id}"
+      def call_api(method:, url:, body: nil)
+        ExceptionUtils.handle_error_rethrow do
+          response = RestClient::Request.execute method: method,
+                                                 url: url,
+                                                 body: body,
+                                                 headers: request_headers,
+                                                 timeout: API_TIMEOUT
+          yield(response) if block_given?
+        end
+      end
+
+      def access_token
+        @api_token ||= begin
+          digest = Base64.encode64("#{@client_id}:#{@client_secret}").delete("\n")
+          res = RestClient.get @urls.token_get, Authorization: "Basic #{digest}"
+          JSON.parse(res.body)['access_token']
+        end
+      end
+
+      def order_acknowledgement_url(order_number, submission_id)
+        "#{@urls.order_acknowledgement}/#{@account_number}/#{order_number}/#{submission_id}"
       end
 
       def order_status_url(order_number)
@@ -105,11 +103,11 @@ module DHL
         payload.dig('CreationAcknowledge', 'Order', 'OrderSubmission', 'Error') || []
       end
 
-      def request_headers(token)
+      def request_headers
         {
-            Authorization: "Bearer #{token}",
-            Accept: 'application/json',
-            'Content-Type' => 'application/json'
+            'Authorization' => "Bearer #{access_token}",
+            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json'
         }
       end
 

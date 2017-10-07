@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+require 'rest-client'
 require 'json'
 
 require 'active_support/core_ext/string'
@@ -15,4 +17,5 @@ require_relative 'lib/exceptions/invalid_values_found_for_fields'
 require_relative 'lib/urls/sandbox'
 require_relative 'lib/urls/production'
 require_relative 'lib/exception_utils'
+require_relative 'lib/token_store'
 require_relative 'lib/dhl_fulfillment'

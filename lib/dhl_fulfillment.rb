@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'base64'
-require 'rest-client'
-
 module DHL
   # :reek:Attribute
   # :reek:FeatureEnvy
@@ -14,7 +11,8 @@ module DHL
 
     class << self
       attr_reader :urls
-      attr_accessor :client_id, :client_secret, :account_number, :api_token
+      attr_accessor :client_id, :client_secret, :account_number
+      attr_writer :token_store
 
       def configure
         yield self
@@ -61,6 +59,10 @@ module DHL
         end
       end
 
+      def token_store
+        @token_store ||= TokenStore.new(@client_id, @client_secret, @urls)
+      end
+
       protected
 
       def call_api(method:, url:, body: nil)
@@ -71,14 +73,6 @@ module DHL
                                                  headers: request_headers,
                                                  timeout: API_TIMEOUT
           yield(response) if block_given?
-        end
-      end
-
-      def access_token
-        @api_token ||= begin
-          digest = Base64.encode64("#{@client_id}:#{@client_secret}").delete("\n")
-          res = RestClient.get @urls.token_get, Authorization: "Basic #{digest}"
-          JSON.parse(res.body)['access_token']
         end
       end
 
@@ -109,7 +103,7 @@ module DHL
 
       def request_headers
         {
-            'Authorization' => "Bearer #{access_token}",
+            'Authorization' => "Bearer #{token_store.api_token}",
             'Accept'        => 'application/json',
             'Content-Type'  => 'application/json'
         }

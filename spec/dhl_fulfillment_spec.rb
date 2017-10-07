@@ -4,13 +4,14 @@ require 'spec_helper'
 
 RSpec.describe DHL::Fulfillment do
   let(:account_number) { '1111111' }
-  let(:urls) { subject::Urls::Sandbox.new }
+  let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
 
   before(:each) do
     DHL::Fulfillment.configure do |config|
       config.urls = urls
-      config.api_token = 'test-token'
     end
+
+    allow_any_instance_of(DHL::Fulfillment::TokenStore).to receive(:api_token) { 'test-token' }
   end
 
   describe '#create_sales_order' do
@@ -127,6 +128,25 @@ RSpec.describe DHL::Fulfillment do
           expect { subject.shipment_details(account_number) }.to raise_error(/401/)
         end
       end
+    end
+  end
+
+  describe '#token_store' do
+    let(:store) { double }
+
+    before do
+      subject.token_store = nil
+      allow(DHL::Fulfillment::TokenStore).to receive(:new) { store }
+    end
+
+    it 'instantiates a token store' do
+      subject.token_store
+      expect(DHL::Fulfillment::TokenStore).to have_received(:new)
+          .with('dhlclientid', 'dhlclientsecret', urls)
+    end
+
+    it 'once instantiated, reuses the same store' do
+      expect(subject.token_store).to be subject.token_store
     end
   end
 end

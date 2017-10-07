@@ -1,25 +1,38 @@
 # frozen_string_literal: true
 
 # Helper module for retrying something several times
-# Example: attempt(3).times { do_something }
+#
+# Usage:
+#   attempt(3).times do
+#     success = do_something
+#     next_try! if not success
+#   end
+#
 module Retry
   def attempt(max_attempts)
     @retry_max = max_attempts
-    @retry_count = 0
     self
   end
 
-  def times(&block)
-    @retry_block = block
-    block.yield
+  def times
+    @retry_max.times do
+      begin
+        return yield if block_given?
+      rescue NextTry
+        next
+      end
+    end
+    raise OutOfAttempts
   end
+
+  protected
 
   def next_try!
-    raise OutOfRetryAttempts if @retry_count >= @retry_max
-    @retry_count + +
-    @retry_block.yield
+    raise NextTry
   end
 
+  # Exception to raise to trigger a retry
+  class NextTry < RuntimeError; end
   # Exception to raise when running out of retry attempts
-  class OutOfRetryAttempts < ::RuntimeError; end
+  class OutOfAttempts < RuntimeError; end
 end

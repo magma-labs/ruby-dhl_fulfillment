@@ -9,13 +9,13 @@ RSpec.describe Retry do
 
   context 'when the running block calls next_try!' do
     it 'keeps retrying until it runs out of retry attempts' do
-      attempt(5).times do
-        begin
+      begin
+        attempt(5).times do
           test_object.do_something
           next_try!
-        rescue Retry::OutOfAttempts
-          test_object.do_other_thing
         end
+      rescue Retry::OutOfAttempts
+        test_object.do_other_thing
       end
 
       expect(test_object).to have_received(:do_something).exactly(5).times

@@ -23,12 +23,10 @@ RSpec.configure do |config|
     conf.allow_http_connections_when_no_cassette = true
   end
 
-  config.before :suite do
-    DHL::Fulfillment.configure do |config|
-      config.urls = :sandbox
-      config.client_id = 'dhlclientid'
-      config.client_secret = 'dhlclientsecret'
-      config.account_number = '1111111'
-    end
+  DHL::Fulfillment.configure do |config|
+    config.urls = :sandbox
+    config.client_id = 'dhlclientid'
+    config.client_secret = 'dhlclientsecret'
+    config.account_number = '1111111'
   end
 end

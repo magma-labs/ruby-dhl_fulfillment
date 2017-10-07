@@ -5,6 +5,8 @@ module DHL
   module Fulfillment
     # API Token store
     class TokenStore
+      include Retry
+
       def initialize(username, password, urls)
         @username = username
         @password = password
@@ -12,14 +14,19 @@ module DHL
       end
 
       def api_token
-        @api_token ||= begin
-          encoded = encode_credentials
-          response = RestClient.get(@urls.token_get, Authorization: "Basic #{encoded}")
-          JSON.parse(response.body)['access_token']
-        end
+        @api_token ||= attempt(3).times { try_retrieve_token }
+      rescue OutOfRetryAttempts
+        raise APIException, "Can't retrieve access token. Verify your credentials."
       end
 
       protected
+
+      def try_retrieve_token
+        response = RestClient.get(@urls.token_get, Authorization: "Basic #{encode_credentials}")
+        JSON.parse(response.body)['access_token']
+      rescue RestClient::Forbidden, RestClient::Unauthorized
+        next_try!
+      end
 
       def encode_credentials
         Base64.encode64("#{@username}:#{@password}").delete("\n")

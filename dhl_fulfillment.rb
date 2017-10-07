@@ -7,6 +7,8 @@ require 'json'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/object/blank'
 
+require_relative 'lib/support/retry'
+
 require_relative 'lib/adapters/base'
 require_relative 'lib/adapters/shopify/webhooks/order'
 require_relative 'lib/builders/sales_order'

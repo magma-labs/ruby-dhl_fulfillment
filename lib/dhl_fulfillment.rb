@@ -47,7 +47,7 @@ module DHL
         JSON.parse(res.body)['access_token']
       end
 
-      def create_order(options, token)
+      def create_sales_order(options, token)
         ExceptionUtils.handle_error_rethrow do
           headers = request_headers token
           response = RestClient.post @urls.order_create, options.to_json, headers
@@ -56,7 +56,7 @@ module DHL
         end
       end
 
-      def order_acknowledgement(params)
+      def sales_order_acknowledgement(params)
         ExceptionUtils.handle_error_rethrow do
           url = order_acknowledgement_url(params)
           headers = request_headers params[:token]
@@ -68,7 +68,7 @@ module DHL
         end
       end
 
-      def order_status(order_number, token)
+      def sales_order_status(order_number, token)
         ExceptionUtils.handle_error_rethrow do
           url = order_status_url(order_number)
           headers = request_headers token
@@ -76,7 +76,7 @@ module DHL
         end
       end
 
-      def order_shipment_details(order_number, token)
+      def shipment_details(order_number, token)
         ExceptionUtils.handle_error_rethrow do
           url = shipment_details_url(order_number)
           headers = request_headers token

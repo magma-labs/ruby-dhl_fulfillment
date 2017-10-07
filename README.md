@@ -26,8 +26,8 @@ Then, start calling `DHL::Fulfillment` methods.
 
 ```ruby
 token = DHL::Fulfillment.access_token
-DHL::Fulfillment.create_order(properties_hash, token)
-DHL::Fulfillment.order_acknowledgement(options)
+DHL::Fulfillment.create_sales_order(properties_hash, token)
+DHL::Fulfillment.sales_order_acknowledgement(options)
 ```
 
 ### Contributing

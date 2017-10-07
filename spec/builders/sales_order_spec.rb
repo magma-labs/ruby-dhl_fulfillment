@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../dummy_adapter'
+require_relative '../support/dummy_adapter'
 
 nmsp = DHL::Fulfillment
 

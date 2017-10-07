@@ -44,7 +44,7 @@ RSpec.describe DHL::Fulfillment do
   end
 
   describe '#create_sales_order' do
-    let(:options) { JSON.parse(File.read("#{File.dirname(__FILE__)}/order_request_body.json")) }
+    let(:options) { JSON.parse File.read('spec/support/order_request_body.json') }
 
     context 'when request is correct' do
       it 'returns a 200 status code' do

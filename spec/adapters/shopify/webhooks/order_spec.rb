@@ -5,7 +5,7 @@ require 'spec_helper'
 nmsp = DHL::Fulfillment::Adapters::Shopify::Webhooks
 
 RSpec.describe nmsp::Order do
-  let(:payload_file) { "#{File.dirname(__FILE__)}/payload.json" }
+  let(:payload_file) { 'spec/support/shopify_payload.json' }
   let(:payload) { File.read(payload_file) }
   let(:adapter) { nmsp::Order.new(payload) }
 

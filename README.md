@@ -2,6 +2,13 @@
 
 A gem to access the [DHL Fulfillment API](https://api-qa.dhlecommerce.com/apidoc/apidoc-eff.html).
 
+### Current working endpoints
+
+- CreateSalesOrder
+- SalesOrderStatus
+- SalesOrderAcknowledgment
+- ShipmentDetails
+
 ### Usage
 
 Configure the gem with your DHL credentials.

@@ -10,4 +10,5 @@ group :development, :test do
   gem 'vcr'
   gem 'rubocop', '~> 0.49'
   gem 'reek', '~> 4.7'
+  gem 'rake'
 end

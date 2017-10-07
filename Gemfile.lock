@@ -97,6 +97,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  rake
   reek (~> 4.7)
   rest-client
   rspec

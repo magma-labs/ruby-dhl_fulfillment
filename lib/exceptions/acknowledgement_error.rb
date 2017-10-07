@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     # Error to raise if order acknowledgement goes wrong.
     class AcknowledgementError < DHLAPIException
       def initialize(api_response = '')

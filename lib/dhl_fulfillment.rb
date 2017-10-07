@@ -11,8 +11,8 @@ require_relative 'exception_utils'
 
 module DHL
   # :reek:FeatureEnvy
-  # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/efulfillment)
-  module EFulfillment
+  # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/Fulfillment)
+  module Fulfillment
     ALREADY_IN_SYSTEM = 'YFC0001'
     INVALID_VALUES_FOR_FIELDS = '919'
 
@@ -35,7 +35,7 @@ module DHL
 
       def urls=(urls_class)
         @urls = if urls_class.is_a?(Symbol) || urls_class.is_a?(String)
-                  "DHL::EFulfillment::Urls::#{urls_class.to_s.camelize}".constantize.new
+                  "DHL::Fulfillment::Urls::#{urls_class.to_s.camelize}".constantize.new
                 else
                   urls_class
                 end

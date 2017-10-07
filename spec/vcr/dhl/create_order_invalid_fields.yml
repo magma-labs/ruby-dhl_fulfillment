@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order
+    uri: https://api-qa.dhlecommerce.com/Fulfillment/v1/order
     body:
       encoding: UTF-8
       string: '{"CreateSalesOrder":{"MessageDateTime":"2017-02-16T03:27:50","OrderSubmissionID":"0420FL01","AccountNumber":"1111111","OrgID":"","Order":{"OrderHeader":{"OrderDateTime":"2017-02-16T03:27:50","OrderNumber":"0420FL01","OrderReferenceNumber":"","SalesChannel":"DeC","IsB2BOrder":"N","ShippingServiceID":"DECD

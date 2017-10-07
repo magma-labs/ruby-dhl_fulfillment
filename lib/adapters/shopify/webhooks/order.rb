@@ -3,7 +3,7 @@
 require 'json'
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     module Adapters
       module Shopify
         module Webhooks
@@ -12,7 +12,7 @@ module DHL
           # :reek:FeatureEnvy
           # rubocop:disable Metrics/ClassLength
           # Adapter for the shopify order
-          class Order < ::DHL::EFulfillment::Adapters::Base
+          class Order < ::DHL::Fulfillment::Adapters::Base
             DEFAULT_FIRST_NAME = 'Customer'
             STATE_CODES_FILE = "#{File.dirname __FILE__}/../../../../us_state_codes.json"
             STATE_CODES = JSON.parse(File.read(STATE_CODES_FILE)).freeze

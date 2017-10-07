@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     module Adapters
       # Dummy adapter useful for testing
       # :reek:TooManyMethods

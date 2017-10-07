@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe DHL::EFulfillment do
+RSpec.describe DHL::Fulfillment do
   let(:urls) { subject::Urls::Sandbox.new }
   let(:account_number) { '1111111' }
   let(:token) do
@@ -23,7 +23,7 @@ RSpec.describe DHL::EFulfillment do
     context 'when request returns a 403 error' do
       before do
         allow(urls).to receive(:token_get) do
-          'https://api-qa.dhlecommerce.com/efulfillment/v1/auth/no-exists'
+          'https://api-qa.dhlecommerce.com/Fulfillment/v1/auth/no-exists'
         end
       end
 

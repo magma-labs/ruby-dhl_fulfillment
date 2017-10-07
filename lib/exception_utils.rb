@@ -3,7 +3,7 @@
 require_relative 'exceptions/dhl_api_exception'
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     # Helps converting the RestClient exceptions to DHL API Exceptions
     class ExceptionUtils
       def self.bad_request(exception)

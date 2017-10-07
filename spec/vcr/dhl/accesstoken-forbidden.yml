@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/auth/no-exists
+    uri: https://api-qa.dhlecommerce.com/Fulfillment/v1/auth/no-exists
     body:
       encoding: US-ASCII
       string: ''

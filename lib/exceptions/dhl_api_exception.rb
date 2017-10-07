@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     # Class for internal DHL API exceptions
     class DHLAPIException < ::RuntimeError
       attr_reader :api_response

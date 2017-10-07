@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'webmock/rspec'
 require 'vcr'
-require_relative '../dhl_efulfillment'
+require 'webmock/rspec'
+require_relative '../dhl_fulfillment'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -24,7 +24,7 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    DHL::EFulfillment.configure do |config|
+    DHL::Fulfillment.configure do |config|
       config.urls = :sandbox
       config.client_id = 'dhlclientid'
       config.client_secret = 'dhlclientsecret'

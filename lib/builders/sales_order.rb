@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     module Builders
       # builds the sales order payload
       # rubocop:disable Metrics/ClassLength

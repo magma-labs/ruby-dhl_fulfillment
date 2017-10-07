@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     # This error is meant to be thrown when the DHL API responds with something like this:
     # {
     #   "session": "Id-0210c6598835bf1aa7775682",

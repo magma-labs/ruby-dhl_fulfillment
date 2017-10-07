@@ -2,7 +2,7 @@
 
 require_relative '../dummy_adapter'
 
-nmsp = DHL::EFulfillment
+nmsp = DHL::Fulfillment
 
 RSpec.describe nmsp::Builders::SalesOrder do
   let(:builder) do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DHL
-  module EFulfillment
+  module Fulfillment
     module Adapters
       # Provider-indepent structure for line items
       Item = Struct.new :id, :quantity, :sku, :title, :price, :fulfillment_service

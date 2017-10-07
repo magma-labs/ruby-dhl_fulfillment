@@ -1,13 +1,13 @@
-# ruby-dhl_efulfillment
+# ruby-dhl_fulfillment
 
-A gem to access the [DHL eFulfillment API](https://api-qa.dhlecommerce.com/apidoc/apidoc-eff.html).
+A gem to access the [DHL Fulfillment API](https://api-qa.dhlecommerce.com/apidoc/apidoc-eff.html).
 
 ### Usage
 
 Configure the gem with your DHL credentials.
 
 ```ruby
-DHL::EFulfillment.configure do |config|
+DHL::Fulfillment.configure do |config|
   config.urls = :sandbox # or :production for the real thing.
   config.client_id = ENV['DHL_CLIENT_ID']
   config.client_secret = ENV['DHL_CLIENT_SECRET']
@@ -15,12 +15,12 @@ DHL::EFulfillment.configure do |config|
 end
 ```
 
-Then, start calling `DHL::EFulfillment` methods.
+Then, start calling `DHL::Fulfillment` methods.
 
 ```ruby
-token = DHL::EFulfillment.access_token
-DHL::EFulfillment.create_order(properties_hash, token)
-DHL::EFulfillment.order_acknowledgement(options)
+token = DHL::Fulfillment.access_token
+DHL::Fulfillment.create_order(properties_hash, token)
+DHL::Fulfillment.order_acknowledgement(options)
 ```
 
 ### Contributing

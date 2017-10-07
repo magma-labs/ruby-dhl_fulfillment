@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-nmsp = DHL::EFulfillment::Adapters::Shopify::Webhooks
+nmsp = DHL::Fulfillment::Adapters::Shopify::Webhooks
 
 RSpec.describe nmsp::Order do
   let(:payload_file) { "#{File.dirname(__FILE__)}/payload.json" }

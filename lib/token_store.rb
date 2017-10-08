@@ -19,6 +19,10 @@ module DHL
         raise APIException, "Can't retrieve access token. Verify your credentials."
       end
 
+      def clear
+        @api_token = nil
+      end
+
       protected
 
       def try_retrieve_token

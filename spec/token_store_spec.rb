@@ -6,11 +6,13 @@ RSpec.describe DHL::Fulfillment::TokenStore do
   let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
   subject { DHL::Fulfillment::TokenStore.new('username', 'password', urls) }
 
+  # Token string from vcr cassette
+  let(:token_string) { 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R' }
+
   describe '#api_token' do
     it 'asks the API for an access token' do
       VCR.use_cassette 'dhl/accesstoken-success' do
-        # Token string from vcr cassette
-        expect(subject.api_token).to eql 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R'
+        expect(subject.api_token).to eql token_string
       end
     end
 
@@ -26,6 +28,17 @@ RSpec.describe DHL::Fulfillment::TokenStore do
           expect { subject.api_token }.to raise_error DHL::Fulfillment::APIException
         end
       end
+    end
+  end
+
+  describe '#clear' do
+    before do
+      VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
+      allow(subject).to receive(:try_retrieve_token) { 'new_token' }
+    end
+
+    it 'deletes the stored api token, so a new token is retrieved next time #api_token is called' do
+      expect { subject.clear }.to change(subject, :api_token).from(token_string).to('new_token')
     end
   end
 end

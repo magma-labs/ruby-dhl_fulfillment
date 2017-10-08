@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'webmock/rspec'
 
 RSpec.describe DHL::Fulfillment::TokenStore do
   let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
@@ -20,6 +21,18 @@ RSpec.describe DHL::Fulfillment::TokenStore do
       expect(Base64).to receive_message_chain :encode64, :delete
 
       VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
+    end
+
+    context 'after obtaining an api token' do
+      before do
+        VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
+      end
+
+      it 'reuses it' do
+        expect(subject.api_token).to eql token_string
+        # There should be no HTTP requests issued in this test
+        expect(a_request(:any, '*')).not_to have_been_made
+      end
     end
 
     context 'when wrong credentials are provided' do

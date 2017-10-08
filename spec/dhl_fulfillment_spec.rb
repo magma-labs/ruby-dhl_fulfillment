@@ -5,13 +5,16 @@ require 'spec_helper'
 RSpec.describe DHL::Fulfillment do
   let(:account_number) { '1111111' }
   let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
+  let(:token_store) { double }
 
   before(:each) do
     DHL::Fulfillment.configure do |config|
       config.urls = urls
+      config.token_store = token_store
     end
 
-    allow_any_instance_of(DHL::Fulfillment::TokenStore).to receive(:api_token) { 'test-token' }
+    allow(token_store).to receive(:api_token) { 'test-token' }
+    allow(token_store).to receive(:clear)
   end
 
   describe '#create_sales_order' do
@@ -36,9 +39,28 @@ RSpec.describe DHL::Fulfillment do
 
     context 'when authorization token is not valid' do
       it 'returns a 401 status code' do
-        VCR.use_cassette('dhl/create_order_invalid_token') do
-          expect { subject.create_sales_order(properties) }.to raise_error(/401/)
+        VCR.use_cassette 'dhl/create_order_invalid_token', allow_playback_repeats: true do
+          expect { subject.create_sales_order(properties) }
+              .to raise_error DHL::Fulfillment::Unauthorized
         end
+      end
+
+      it 'resets the store api token, so a new one can be retrieved' do
+        VCR.use_cassette 'dhl/create_order_invalid_token', allow_playback_repeats: true do
+          expect { subject.create_sales_order(properties) }
+              .to raise_error DHL::Fulfillment::Unauthorized
+        end
+
+        # store receives this message twice because we attempt twice to do the request
+        expect(token_store).to have_received(:clear).twice
+      end
+
+      it 'tries again a second time' do
+        allow(subject).to receive(:execute_api_request).and_raise RestClient::Unauthorized
+
+        expect { subject.create_sales_order(properties) }
+            .to raise_error DHL::Fulfillment::Unauthorized
+        expect(subject).to have_received(:execute_api_request).twice
       end
     end
 
@@ -88,18 +110,17 @@ RSpec.describe DHL::Fulfillment do
 
     context 'when the order does not exist' do
       it 'returns a 400 status code' do
-        VCR.use_cassette('dhl/order_status_non_existent_order') do
-          expect { subject.sales_order_status(account_number) }
-              .to raise_error(/400/)
+        VCR.use_cassette 'dhl/order_status_non_existent_order', allow_playback_repeats: true do
+          expect { subject.sales_order_status(account_number) }.to raise_error(/400/)
         end
       end
     end
 
     context 'when authorization token is not valid' do
       it 'returns a 401 status code' do
-        VCR.use_cassette('dhl/order_status_invalid_token') do
+        VCR.use_cassette 'dhl/order_status_invalid_token', allow_playback_repeats: true do
           expect { subject.sales_order_status(account_number) }
-              .to raise_error(/401/)
+              .to raise_error DHL::Fulfillment::Unauthorized
         end
       end
     end
@@ -124,8 +145,9 @@ RSpec.describe DHL::Fulfillment do
 
     context 'when authorization token is not valid' do
       it 'returns a 401 status code' do
-        VCR.use_cassette('dhl/order_shipment_invalid_token') do
-          expect { subject.shipment_details(account_number) }.to raise_error(/401/)
+        VCR.use_cassette 'dhl/order_shipment_invalid_token', allow_playback_repeats: true do
+          expect { subject.shipment_details(account_number) }
+              .to raise_error DHL::Fulfillment::Unauthorized
         end
       end
     end

@@ -3,6 +3,7 @@
 module DHL
   # :reek:Attribute
   # :reek:FeatureEnvy
+  # rubocop:disable ModuleLength
   # Connector for the DHL Fulfillment API (https://api-qa.dhlecommerce.com/fulfillment)
   module Fulfillment
     API_TIMEOUT = 10
@@ -10,6 +11,8 @@ module DHL
     INVALID_VALUES_FOR_FIELDS = '919'
 
     class << self
+      include Retry
+
       attr_reader :urls
       attr_accessor :client_id, :client_secret, :account_number
       attr_writer :token_store
@@ -65,15 +68,32 @@ module DHL
 
       protected
 
-      def call_api(method:, url:, body: nil)
+      def call_api(method:, url:, body: nil, &block)
+        attempt(2).times do
+          begin
+            try_call_api(method, url, body, &block)
+          rescue RestClient::Unauthorized
+            @token_store.clear
+            next_try!
+          end
+        end
+      rescue Retry::OutOfAttempts
+        ExceptionUtils.raise_unauthorized
+      end
+
+      def try_call_api(method, url, body)
         ExceptionUtils.handle_error_rethrow do
-          response = RestClient::Request.execute method: method,
-                                                 url: url,
-                                                 body: body,
-                                                 headers: request_headers,
-                                                 timeout: API_TIMEOUT
+          response = execute_api_request(method, url, body)
           yield(response) if block_given?
         end
+      end
+
+      def execute_api_request(method, url, body)
+        RestClient::Request.execute method: method,
+                                    url: url,
+                                    body: body,
+                                    headers: request_headers,
+                                    timeout: API_TIMEOUT
       end
 
       def order_acknowledgement_url(order_number, submission_id)

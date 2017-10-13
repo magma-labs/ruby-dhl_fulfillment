@@ -10,7 +10,7 @@ module DHL
       def initialize(username, password, url)
         @username = username
         @password = password
-        @url =  url
+        @url = url
       end
 
       def api_token

@@ -15,6 +15,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     codeclimate-engine-rb (0.4.0)
       virtus (~> 1.0)
+    coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.0.5)
@@ -31,6 +32,7 @@ GEM
       domain_name (~> 0.5)
     i18n (0.8.6)
     ice_nine (0.11.2)
+    method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -40,6 +42,10 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     powerpack (0.1.1)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     public_suffix (3.0.0)
     rainbow (2.2.2)
       rake
@@ -74,6 +80,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
     safe_yaml (1.0.4)
+    slop (3.6.0)
     thread_safe (0.3.6)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
@@ -97,6 +104,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  pry
   rake
   reek (~> 4.7)
   rest-client

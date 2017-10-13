@@ -2,6 +2,7 @@
 
 module DHL
   module Fulfillment
+    # Makes HTTP requests and transforms internal exceptions to DHL::Fulfillment exceptions
     class APICaller
       include Support::Retry
 
@@ -9,6 +10,9 @@ module DHL
 
       def initialize(token_store)
         @token_store = token_store
+        @method = nil
+        @url = nil
+        @body = nil
       end
 
       def call(method:, url:, body: nil, &block)
@@ -26,7 +30,7 @@ module DHL
         attempt(2).times do
           begin
             execute_api_request(&block)
-          rescue RestClient::Unauthorized
+          rescue Unauthorized
             @token_store.clear
             next_try!
           end

@@ -16,7 +16,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe '#create_sales_order' do
+  describe 'when creating a sales order' do
     let(:properties) { JSON.parse File.read('spec/support/order_request_body.json') }
 
     context 'when request is correct' do
@@ -30,18 +30,19 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
 
     context 'when properties hash is not in the right format' do
-      it 'returns a 400 status code' do
+      it 'raises an APIException with a related message' do
         VCR.use_cassette('dhl/accesstoken-success') do
           VCR.use_cassette('dhl/create_order_no_body') do
             properties = {}
-            expect { subject.create_sales_order(properties) }.to raise_error(/400/)
+            expect { subject.create_sales_order(properties) }
+                .to raise_error DHL::Fulfillment::APIException, /JSON validation failed/
           end
         end
       end
     end
 
     context 'when authorization token is not valid' do
-      it 'returns a 401 status code' do
+      it 'raises an Unauthorized exception' do
         VCR.use_cassette('dhl/accesstoken-success', allow_playback_repeats: true) do
           VCR.use_cassette 'dhl/create_order_invalid_token', allow_playback_repeats: true do
             expect { subject.create_sales_order(properties) }
@@ -65,10 +66,13 @@ RSpec.describe 'The DHL Fulfillment gem' do
       end
 
       it 'tries again a second time' do
-        allow(api_caller).to receive(:execute_api_request).and_raise RestClient::Unauthorized
+        allow(api_caller).to receive(:execute_api_request)
+            .and_raise DHL::Fulfillment::Unauthorized, 'Exception'
 
+        # This syntax is used to prevent failing because of the raised exception
         expect { subject.create_sales_order(properties) }
             .to raise_error DHL::Fulfillment::Unauthorized
+
         expect(api_caller).to have_received(:execute_api_request).twice
       end
     end
@@ -85,7 +89,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe '#sales_order_acknowledgement' do
+  describe 'when acknowledging order creation' do
     let(:order_number) { '1234' }
     let(:submission_id) { '0420FL011' }
 
@@ -114,7 +118,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe '#sales_order_status' do
+  describe 'when checking order status' do
     context 'when request is succesful' do
       it 'returns a 200 status code' do
         VCR.use_cassette('dhl/accesstoken-success', allow_playback_repeats: true) do
@@ -126,10 +130,11 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
 
     context 'when the order does not exist' do
-      it 'returns a 400 status code' do
+      it 'raises an APIException with a related message' do
         VCR.use_cassette('dhl/accesstoken-success') do
           VCR.use_cassette 'dhl/order_status_non_existent_order', allow_playback_repeats: true do
-            expect { subject.sales_order_status(account_number) }.to raise_error(/400/)
+            expect { subject.sales_order_status(account_number) }
+                .to raise_error DHL::Fulfillment::APIException, /Security Violation/
           end
         end
       end
@@ -140,14 +145,14 @@ RSpec.describe 'The DHL Fulfillment gem' do
         VCR.use_cassette('dhl/accesstoken-success', allow_playback_repeats: true) do
           VCR.use_cassette 'dhl/order_status_invalid_token', allow_playback_repeats: true do
             expect { subject.sales_order_status(account_number) }
-              .to raise_error DHL::Fulfillment::Unauthorized
+                .to raise_error DHL::Fulfillment::Unauthorized
           end
         end
       end
     end
   end
 
-  describe '#shipment_details' do
+  describe 'when retrieving shipment details' do
     context 'when request is succesful' do
       it 'returns a 200 status code' do
         VCR.use_cassette('dhl/accesstoken-success') do
@@ -159,10 +164,11 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
 
     context 'when the order does not exist' do
-      it 'returns a 400 status code' do
+      it 'raises an APIException with a related message' do
         VCR.use_cassette('dhl/accesstoken-success') do
           VCR.use_cassette('dhl/order_shipment_non_existent_order') do
-            expect { subject.shipment_details(account_number) }.to raise_error(/400/)
+            expect { subject.shipment_details(account_number) }
+                .to raise_error DHL::Fulfillment::APIException, /Invalid value/
           end
         end
       end

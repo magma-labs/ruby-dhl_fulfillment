@@ -5,17 +5,17 @@ module DHL
   module Fulfillment
     # API Token store
     class TokenStore
-      include Retry
+      include Support::Retry
 
-      def initialize(username, password, urls)
+      def initialize(username, password, url)
         @username = username
         @password = password
-        @urls = urls
+        @url =  url
       end
 
       def api_token
         @api_token ||= attempt(3).times { try_retrieve_token }
-      rescue Retry::OutOfAttempts
+      rescue Support::Retry::OutOfAttempts
         ExceptionUtils.raise_unauthorized
       end
 
@@ -26,7 +26,7 @@ module DHL
       protected
 
       def try_retrieve_token
-        response = RestClient.get(@urls.token_get, Authorization: "Basic #{encode_credentials}")
+        response = RestClient.get(@url, Authorization: "Basic #{encode_credentials}")
         JSON.parse(response.body)['access_token']
       rescue RestClient::Forbidden, RestClient::Unauthorized
         next_try!

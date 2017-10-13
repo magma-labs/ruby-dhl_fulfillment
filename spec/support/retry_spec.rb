@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-RSpec.describe Retry do
+RSpec.describe DHL::Fulfillment::Support::Retry do
   let(:test_object) { spy }
 
   before do
-    extend Retry
+    extend DHL::Fulfillment::Support::Retry
   end
 
   context 'when the running block calls next_try!' do
@@ -16,7 +16,7 @@ RSpec.describe Retry do
           test_object.do_something
           next_try!
         end
-      rescue Retry::OutOfAttempts
+      rescue DHL::Fulfillment::Support::Retry::OutOfAttempts
         test_object.do_other_thing
       end
 
@@ -32,7 +32,7 @@ RSpec.describe Retry do
           end
         end
 
-        expect(&block).to raise_error Retry::OutOfAttempts
+        expect(&block).to raise_error DHL::Fulfillment::Support::Retry::OutOfAttempts
       end
     end
   end

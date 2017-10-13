@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/object/blank'
 

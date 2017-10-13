@@ -5,9 +5,8 @@ module DHL
     module Builders
       # builds the sales order payload
       # rubocop:disable Metrics/ClassLength
-      # :reek:NilCheck
       class SalesOrder
-        MAX_ADDRESS_LENGTH = 35
+        MAX_STRING_LENGTH = 35
 
         attr_reader :adapter, :account_number
 
@@ -19,11 +18,6 @@ module DHL
 
         def build
           @payload = { CreateSalesOrder: create_sales_order }
-        end
-
-        def empty_order?
-          items = @payload&.dig(:CreateSalesOrder, :Order, :OrderDetails, :OrderLine) || []
-          items.empty?
         end
 
         private
@@ -83,34 +77,36 @@ module DHL
         end
 
         def bill_to
-          address_for('billing').merge(City: @adapter.billing_city,
+          address_for('billing').merge City: @adapter.billing_city.truncate(MAX_STRING_LENGTH),
                                        State: @adapter.billing_state,
                                        Country: @adapter.billing_country,
                                        FirstName: @adapter.billing_first_name,
                                        LastName: @adapter.billing_last_name,
                                        PhoneNumber: @adapter.billing_phone,
-                                       ZipCode: @adapter.billing_zip)
+                                       ZipCode: @adapter.billing_zip
         end
 
         # :reek:FeatureEnvy
         def address_for(type)
-          address = @adapter.send("#{type}_address")
-          if address.length <= MAX_ADDRESS_LENGTH
-            { AddressLine1: address }
+          first = @adapter.send("#{type}_address") || ''
+          second = @adapter.send("#{type}_address_2") || ''
+          if first.length <= MAX_STRING_LENGTH
+            { AddressLine1: first, AddressLine2: second }
           else
-            { AddressLine1: address[0...MAX_ADDRESS_LENGTH],
-              AddressLine2: address[MAX_ADDRESS_LENGTH..-1] }
+            splitted_part = first[MAX_STRING_LENGTH..-1]
+            second = second.present? ? "#{splitted_part} #{second}" : splitted_part
+            { AddressLine1: first[0...MAX_STRING_LENGTH], AddressLine2: second }
           end
         end
 
         def ship_to
-          address_for('shipping').merge(City: @adapter.shipping_city,
+          address_for('shipping').merge City: @adapter.shipping_city,
                                         State: @adapter.shipping_state,
                                         Country: @adapter.shipping_country,
                                         FirstName: @adapter.shipping_first_name,
                                         LastName: @adapter.shipping_last_name,
                                         PhoneNumber: @adapter.shipping_phone,
-                                        ZipCode: @adapter.shipping_zip)
+                                        ZipCode: @adapter.shipping_zip
         end
 
         def order_details

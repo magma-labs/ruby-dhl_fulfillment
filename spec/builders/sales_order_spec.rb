@@ -5,9 +5,8 @@ require_relative '../dummy_adapter'
 nmsp = DHL::Fulfillment
 
 RSpec.describe nmsp::Builders::SalesOrder do
-  let(:builder) do
-    nmsp::Builders::SalesOrder.new(nmsp::Adapters::Dummy.new, 12_345)
-  end
+  let(:adapter) { nmsp::Adapters::Dummy.new }
+  let(:builder) { nmsp::Builders::SalesOrder.new(adapter, 123) }
 
   describe '#build' do
     it 'returns a hash with billing address as expected by the DHL API' do
@@ -16,6 +15,7 @@ RSpec.describe nmsp::Builders::SalesOrder do
       expect(hash).to be_a Hash
       address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :BillTo)
       expect(address[:AddressLine1]).to eql '5th Street 123'
+      expect(address[:AddressLine2]).to eql 'Suite 20'
       expect(address[:City]).to eql 'San Francisco'
       expect(address[:State]).to eql 'CA'
       expect(address[:Country]).to eql 'United States'
@@ -24,18 +24,118 @@ RSpec.describe nmsp::Builders::SalesOrder do
       expect(address[:ZipCode]).to eql '8923'
     end
 
+    context 'when an order has billing address in their payload with more than 35 chars in it' do
+      before do
+        allow(adapter).to receive(:billing_address) { 'This is a very long address line, indeed.' }
+        allow(adapter).to receive(:billing_address_2) { nil }
+      end
+
+      it 'splits the long address between AddressLine1 and AddressLine2 in the DHL payload' do
+        hash = builder.build
+
+        address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :BillTo)
+        expect(address[:AddressLine1].length).to eql 35
+        expect(address[:AddressLine1]).to eql 'This is a very long address line, i'
+        expect(address[:AddressLine2]).to eql 'ndeed.'
+      end
+
+      context 'when the order also has an address2 in its Shopify payload' do
+        before do
+          allow(adapter).to receive(:billing_address_2) { 'Yep. Indeed.' }
+        end
+
+        it 'splits the long address and includes the address2 in the DHL payload' do
+          hash = builder.build
+
+          address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :BillTo)
+          expect(address[:AddressLine1]).to eql 'This is a very long address line, i'
+          expect(address[:AddressLine2]).to eql 'ndeed. Yep. Indeed.'
+        end
+      end
+    end
+
+    context 'when an order doenst have a billing address second line' do
+      before do
+        allow(adapter).to receive(:billing_address_2) { nil }
+      end
+
+      it 'uses an empty string as second line' do
+        hash = builder.build
+
+        address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :BillTo)
+        expect(address[:AddressLine2]).to eql ''
+      end
+    end
+
+    context 'when an order has a billing city with more than 35 chars in it' do
+      before do
+        allow(adapter).to receive(:billing_city) { 'This is a very long address line, indeed.' }
+      end
+
+      it 'truncates the string to 35 chars' do
+        hash = builder.build
+
+        address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :BillTo)
+        expect(address[:City].length).to eql 35
+      end
+    end
+
     it 'returns a hash with shipping address as expected by the DHL API' do
       hash = builder.build
 
       expect(hash).to be_a Hash
       address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :Shipto)
       expect(address[:AddressLine1]).to eql '5th Street 123'
+      expect(address[:AddressLine2]).to eql 'Suite 20'
       expect(address[:City]).to eql 'San Francisco'
       expect(address[:State]).to eql 'CA'
       expect(address[:Country]).to eql 'United States'
       expect(address[:FirstName]).to eql 'Foo'
       expect(address[:LastName]).to eql 'Bar'
       expect(address[:ZipCode]).to eql '8923'
+    end
+
+    context 'when an order has shipping address in their payload with more than 35 chars in it' do
+      before do
+        allow(adapter).to receive(:shipping_address) { 'This is a very long address line, indeed.' }
+        allow(adapter).to receive(:shipping_address_2) { '' }
+      end
+
+      it 'splits the long address between AddressLine1 and AddressLine2 in the DHL payload' do
+        hash = builder.build
+
+        address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :Shipto)
+        expect(address[:AddressLine1].length).to eql 35
+        expect(address[:AddressLine1]).to eql 'This is a very long address line, i'
+        expect(address[:AddressLine2]).to eql 'ndeed.'
+      end
+
+      context 'when the order also has an address2 in its Shopify payload' do
+        before do
+          allow(adapter).to receive(:shipping_address_2) { 'Yep. Indeed.' }
+        end
+
+        it 'splits the long address and includes the address2 in the DHL payload' do
+          hash = builder.build
+
+          address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :Shipto)
+          expect(address[:AddressLine1]).to eql 'This is a very long address line, i'
+          expect(address[:AddressLine2]).to eql 'ndeed. Yep. Indeed.'
+        end
+      end
+    end
+
+    context 'when an order doenst have a shipping address second line' do
+      before do
+        allow(adapter).to receive(:shipping_address_2) { nil }
+      end
+
+      it 'uses an empty string as second line' do
+        hash = builder.build
+
+        address = hash.dig(:CreateSalesOrder, :Order, :OrderHeader, :Shipto)
+        expect(address[:AddressLine2]).to eql ''
+      end
     end
 
     it 'returns a hash with charges as expected by the DHL API' do

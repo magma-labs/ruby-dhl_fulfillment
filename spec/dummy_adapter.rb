@@ -5,6 +5,7 @@ module DHL
     module Adapters
       # Dummy adapter useful for testing
       # :reek:TooManyMethods
+      # :reek:UncommunicativeMethodName
       class Dummy < Base
         def message_date_time
           '2017-08-15T14:05:22-05:00'
@@ -58,6 +59,10 @@ module DHL
           '5th Street 123'
         end
 
+        def billing_address_2
+          'Suite 20'
+        end
+
         def billing_city
           'San Francisco'
         end
@@ -88,6 +93,10 @@ module DHL
 
         def shipping_address
           '5th Street 123'
+        end
+
+        def shipping_address_2
+          'Suite 20'
         end
 
         def shipping_city

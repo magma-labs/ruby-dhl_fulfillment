@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
-
 module DHL
   module Fulfillment
     module Adapters
@@ -10,12 +8,13 @@ module DHL
           # :reek:TooManyMethods
           # :reek:NilCheck
           # :reek:FeatureEnvy
+          # :reek:UncommunicativeMethodName
           # rubocop:disable Metrics/ClassLength
           # Adapter for the shopify order
           class Order < ::DHL::Fulfillment::Adapters::Base
             DEFAULT_FIRST_NAME = 'Customer'
-            STATE_CODES_FILE = "#{File.dirname __FILE__}/../../../../us_state_codes.json"
-            STATE_CODES = JSON.parse(File.read(STATE_CODES_FILE)).freeze
+            US_CODES_PATH = "#{File.dirname(__FILE__)}/../../../../us_state_codes.json"
+            STATE_CODES = JSON.parse(File.read(US_CODES_PATH)).freeze
 
             def order_id
               payload['id']
@@ -47,6 +46,10 @@ module DHL
 
             def billing_address
               payload.dig('billing_address', 'address1') || shipping_address
+            end
+
+            def billing_address_2
+              payload.dig('billing_address', 'address2') || shipping_address_2
             end
 
             def billing_city
@@ -82,6 +85,10 @@ module DHL
 
             def shipping_address
               payload.dig('shipping_address', 'address1')
+            end
+
+            def shipping_address_2
+              payload.dig('shipping_address', 'address2')
             end
 
             def shipping_city

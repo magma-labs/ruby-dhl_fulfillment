@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'The DHL Fulfillment gem' do
+RSpec.describe DHL::Fulfillment do
   subject { DHL::Fulfillment }
   let(:account_number) { '1111111' }
   let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
@@ -13,10 +13,27 @@ RSpec.describe 'The DHL Fulfillment gem' do
     DHL::Fulfillment.configure do |config|
       config.urls = urls
       config.api_caller = api_caller
+      config.token_store = token_store
     end
   end
 
-  describe 'when creating a sales order' do
+  describe '#access_token' do
+    it 'returns the access token' do
+      VCR.use_cassette 'dhl/accesstoken-success' do
+        expect(subject.access_token).to eql 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R'
+      end
+    end
+
+    context 'when credentials are wrong' do
+      it 'raises an Unauthorized exception' do
+        VCR.use_cassette 'dhl/accesstoken-unauthorized', allow_playback_repeats: true do
+          expect { subject.access_token }.to raise_error DHL::Fulfillment::Unauthorized
+        end
+      end
+    end
+  end
+
+  describe '#create_sales_order' do
     let(:properties) { JSON.parse File.read('spec/support/order_request_body.json') }
 
     context 'when request is correct' do
@@ -89,7 +106,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe 'when acknowledging order creation' do
+  describe '#sales_order_acknowledgement' do
     let(:order_number) { '1234' }
     let(:submission_id) { '0420FL011' }
 
@@ -118,7 +135,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe 'when checking order status' do
+  describe '#sales_order_status' do
     context 'when request is succesful' do
       it 'returns a 200 status code' do
         VCR.use_cassette('dhl/accesstoken-success', allow_playback_repeats: true) do
@@ -152,7 +169,7 @@ RSpec.describe 'The DHL Fulfillment gem' do
     end
   end
 
-  describe 'when retrieving shipment details' do
+  describe '#shipments_details' do
     context 'when request is succesful' do
       it 'returns a 200 status code' do
         VCR.use_cassette('dhl/accesstoken-success') do

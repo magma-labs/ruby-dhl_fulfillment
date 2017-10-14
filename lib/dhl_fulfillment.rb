@@ -11,10 +11,18 @@ module DHL
     class << self
       attr_reader :urls
       attr_accessor :client_id, :client_secret, :account_number
-      attr_writer :api_caller
+      attr_writer :api_caller, :token_store
 
       def configure
         yield self
+      end
+
+      def access_token
+        @token_store.api_token
+      end
+
+      def access_token=(token)
+        token_store.api_token = token
       end
 
       def urls=(urls_class)
@@ -59,8 +67,11 @@ module DHL
       end
 
       def api
-        token_store = TokenStore.new(@client_id, @client_secret, @urls)
         @api_caller ||= APICaller.new(token_store)
+      end
+
+      def token_store
+        @token_store ||= TokenStore.new(@client_id, @client_secret, @urls.token_get)
       end
 
       protected

@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 module DHL
@@ -6,6 +5,8 @@ module DHL
     # API Token store
     class TokenStore
       include Support::Retry
+
+      attr_writer :api_token
 
       def initialize(username, password, url)
         @username = username

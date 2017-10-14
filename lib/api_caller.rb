@@ -4,8 +4,6 @@ module DHL
   module Fulfillment
     # Makes HTTP requests and transforms internal exceptions to DHL::Fulfillment exceptions
     class APICaller
-      include Support::Retry
-
       API_TIMEOUT = 10
 
       def initialize(token_store)
@@ -17,25 +15,12 @@ module DHL
 
       def call(method:, url:, body: nil, &block)
         store_request_vars(method, url, body)
-        try_call(&block)
-      rescue Support::Retry::OutOfAttempts
-        ExceptionUtils.raise_unauthorized
-      ensure
+        response = execute_api_request(&block)
         store_request_vars(nil, nil, nil)
+        response
       end
 
       protected
-
-      def try_call(&block)
-        attempt(2).times do
-          begin
-            execute_api_request(&block)
-          rescue Unauthorized
-            @token_store.clear
-            next_try!
-          end
-        end
-      end
 
       def execute_api_request
         ExceptionUtils.handle_error_rethrow do

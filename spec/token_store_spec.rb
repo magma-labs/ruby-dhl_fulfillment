@@ -47,7 +47,7 @@ RSpec.describe DHL::Fulfillment::TokenStore do
   describe '#clear' do
     before do
       VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
-      allow(subject).to receive(:try_retrieve_token) { 'new_token' }
+      allow(subject).to receive(:retrieve_token) { 'new_token' }
     end
 
     it 'deletes the stored api token, so a new token is retrieved next time #api_token is called' do

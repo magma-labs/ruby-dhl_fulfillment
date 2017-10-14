@@ -67,31 +67,6 @@ RSpec.describe DHL::Fulfillment do
           end
         end
       end
-
-      it 'resets the store api token, so a new one can be retrieved' do
-        allow(token_store).to receive(:clear)
-
-        VCR.use_cassette('dhl/accesstoken-success', allow_playback_repeats: true) do
-          VCR.use_cassette 'dhl/create_order_invalid_token', allow_playback_repeats: true do
-            expect { subject.create_sales_order(properties) }
-                .to raise_error DHL::Fulfillment::Unauthorized
-          end
-        end
-
-        # store receives this message twice because we attempt twice to do the request
-        expect(token_store).to have_received(:clear).twice
-      end
-
-      it 'tries again a second time' do
-        allow(api_caller).to receive(:execute_api_request)
-            .and_raise DHL::Fulfillment::Unauthorized, 'Exception'
-
-        # This syntax is used to prevent failing because of the raised exception
-        expect { subject.create_sales_order(properties) }
-            .to raise_error DHL::Fulfillment::Unauthorized
-
-        expect(api_caller).to have_received(:execute_api_request).twice
-      end
     end
 
     context 'when DHL API responds with an "Invalid values for field(s)" error' do

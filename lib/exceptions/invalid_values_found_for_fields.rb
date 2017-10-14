@@ -10,7 +10,7 @@ module DHL
     #     "description": "Invalid value(s) found for field(s) : Order Number, Order Submission ID"
     #   }
     # }
-    class InvalidValuesFoundForFields < DHLAPIException
+    class InvalidValuesFoundForFields < APIException
       def initialize(api_response = '')
         super JSON.parse(api_response).dig('error', 'description'), api_response
       rescue JSON::ParserError

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api-qa.dhlecommerce.com/Fulfillment/v1/order
+    uri: https://api-qa.dhlecommerce.com/efulfillment/v1/order
     body:
       encoding: UTF-8
       string: "{}"

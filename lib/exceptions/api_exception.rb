@@ -3,7 +3,7 @@
 module DHL
   module Fulfillment
     # Class for internal DHL API exceptions
-    class DHLAPIException < ::RuntimeError
+    class APIException < ::RuntimeError
       attr_reader :api_response
 
       def initialize(message, api_response = '')

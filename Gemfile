@@ -11,4 +11,5 @@ group :development, :test do
   gem 'rubocop', '~> 0.49'
   gem 'reek', '~> 4.7'
   gem 'rake'
+  gem 'pry'
 end

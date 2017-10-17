@@ -14,6 +14,7 @@ module DHL
       attr_writer :api_caller, :token_fetcher
 
       delegate :api_token, :api_token=, to: :token_fetcher
+      delegate :token_store, :token_store=, to: :token_fetcher
 
       def configure
         yield self

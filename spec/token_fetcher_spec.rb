@@ -47,11 +47,44 @@ RSpec.describe DHL::Fulfillment::TokenFetcher do
   describe '#clear' do
     before do
       VCR.use_cassette('dhl/accesstoken-success') { subject.api_token }
-      allow(subject).to receive(:retrieve_token) { 'new_token' }
+      allow(subject).to receive(:retrieve_token_from_api) { 'new_token' }
     end
 
     it 'deletes the stored api token, so a new token is retrieved next time #api_token is called' do
       expect { subject.clear }.to change(subject, :api_token).from(token_string).to('new_token')
+    end
+  end
+
+  describe '#token_store=' do
+    context 'when setting a custom token store' do
+      let(:token_store) { double 'token store' }
+
+      before do
+        allow(token_store).to receive(:token) { 'token123' }
+        allow(token_store).to receive(:token=)
+        subject.token_store = token_store
+      end
+
+      it 'uses the store to access a stored token' do
+        expect(subject.api_token).to eql 'token123'
+        expect(token_store).to have_received(:token).once
+      end
+
+      context 'when the store doesnt have a token' do
+        before do
+          allow(token_store).to receive(:token) { nil }
+          allow(subject).to receive(:retrieve_token_from_api) { 'token123' }
+          subject.api_token
+        end
+
+        it 'retrieves the token from the API' do
+          expect(subject).to have_received(:retrieve_token_from_api).once
+        end
+
+        it 'stores the token in the store' do
+          expect(token_store).to have_received(:token=).with('token123').once
+        end
+      end
     end
   end
 end

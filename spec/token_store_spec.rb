@@ -3,9 +3,9 @@
 require 'spec_helper'
 require 'webmock/rspec'
 
-RSpec.describe DHL::Fulfillment::TokenStore do
+RSpec.describe DHL::Fulfillment::TokenFetcher do
   let(:url) { DHL::Fulfillment::Urls::Sandbox.new.token_get }
-  subject { DHL::Fulfillment::TokenStore.new('username', 'password', url) }
+  subject { DHL::Fulfillment::TokenFetcher.new('username', 'password', url) }
 
   # Token string from vcr cassette
   let(:token_string) { 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R' }

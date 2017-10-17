@@ -3,7 +3,7 @@
 module DHL
   module Fulfillment
     # API Token store
-    class TokenStore
+    class TokenFetcher
       # :reek:Attribute
       attr_writer :api_token
 

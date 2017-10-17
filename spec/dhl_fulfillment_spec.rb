@@ -6,14 +6,14 @@ RSpec.describe DHL::Fulfillment do
   subject { DHL::Fulfillment }
   let(:account_number) { '1111111' }
   let(:urls) { DHL::Fulfillment::Urls::Sandbox.new }
-  let(:token_store) { DHL::Fulfillment::TokenStore.new('username', 'password', urls.token_get) }
-  let(:api_caller) { DHL::Fulfillment::APICaller.new(token_store) }
+  let(:token_fetcher) { DHL::Fulfillment::TokenFetcher.new('username', 'password', urls.token_get) }
+  let(:api_caller) { DHL::Fulfillment::APICaller.new(token_fetcher) }
 
   before(:each) do
     DHL::Fulfillment.configure do |config|
       config.urls = urls
       config.api_caller = api_caller
-      config.token_store = token_store
+      config.token_fetcher = token_fetcher
     end
   end
 

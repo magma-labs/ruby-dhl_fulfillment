@@ -13,16 +13,10 @@ module DHL
       attr_accessor :client_id, :client_secret, :account_number
       attr_writer :api_caller, :token_fetcher
 
+      delegate :api_token, :api_token=, to: :token_fetcher
+
       def configure
         yield self
-      end
-
-      def access_token
-        @token_fetcher.api_token
-      end
-
-      def access_token=(token)
-        token_fetcher.api_token = token
       end
 
       def urls=(urls_class)

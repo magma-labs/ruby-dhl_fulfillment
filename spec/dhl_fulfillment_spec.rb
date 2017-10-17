@@ -17,17 +17,17 @@ RSpec.describe DHL::Fulfillment do
     end
   end
 
-  describe '#access_token' do
+  describe '#api_token' do
     it 'returns the access token' do
       VCR.use_cassette 'dhl/accesstoken-success' do
-        expect(subject.access_token).to eql 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R'
+        expect(subject.api_token).to eql 'hvCku9Rs2EQz5pJUFqBHENtHMElnF1FK0TQ68FYzkSCUUfy4gzrU7R'
       end
     end
 
     context 'when credentials are wrong' do
       it 'raises an Unauthorized exception' do
         VCR.use_cassette 'dhl/accesstoken-unauthorized', allow_playback_repeats: true do
-          expect { subject.access_token }.to raise_error DHL::Fulfillment::Unauthorized
+          expect { subject.api_token }.to raise_error DHL::Fulfillment::Unauthorized
         end
       end
     end

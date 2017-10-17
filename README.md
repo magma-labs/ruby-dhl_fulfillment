@@ -30,6 +30,34 @@ DHL::Fulfillment.create_sales_order(properties_hash, token)
 DHL::Fulfillment.sales_order_acknowledgement(options)
 ```
 
+### Token stores
+
+By default, the gem will request a new acess token, store it in memory
+and reuse it until it expires, but there are scenarios where you would want
+to store the token in a more permanent way.
+
+For those cases, set the `token_store` property in a gem `config` block. Assign
+it to an object that responds to `token` and `token=`.
+
+For example, you could store the token in a file like this:
+
+```ruby
+class TokenFile
+  def token
+    File.read('dhl_token')
+  end
+
+  def token=(token)
+    File.open('dhl_token', 'w') do |file|
+      file.puts token
+    end
+  end
+end
+
+DHL::Fulfillment.configure do |config|
+  config.token_store = TokenFile.new
+end```
+
 ### Contributing
 
 Contributions are welcome! Set up the repo using the following commands:

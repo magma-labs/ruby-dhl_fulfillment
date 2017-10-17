@@ -10,10 +10,10 @@ module DHL
 
         attr_reader :adapter, :account_number
 
-        def initialize(adapter, account_number)
+        def initialize(adapter, account_number = nil)
           @adapter = adapter
           @payload = nil
-          @account_number = account_number
+          @account_number = account_number || DHL::Fulfillment.account_number
         end
 
         def build

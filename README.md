@@ -25,8 +25,10 @@ end
 Then, start calling `DHL::Fulfillment` methods.
 
 ```ruby
+adapter = DHL::Fulfillment::Adapters::Shopify::Webhooks::Order.new(json_payload)
+builder = DHL::Fulfillment::Builders::SalesOrder.new(adapter)
+properties_hash = builder.build
 DHL::Fulfillment.create_sales_order(properties_hash)
-DHL::Fulfillment.sales_order_acknowledgement(options)
 ```
 
 ### Token stores
